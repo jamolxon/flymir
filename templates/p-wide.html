@@ -1,0 +1,88 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+
+        <div id="content" class="site-content">
+            <div class="page-header dtable text-center header-transparent pheader-portfolio">
+                <div class="dcell">
+                    <div class="container">
+                        <h1 class="page-title">Portfolio 3 Columns Wide</h1>
+                        <ul id="breadcrumbs" class="breadcrumbs none-style">
+                            <li><a href="index.html">Home</a></li>
+                            <li class="active">Portfolio 3 Columns Wide</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="our-portfolio">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 text-center theratio-align-center">
+                        <div class="ot-heading is-dots">
+                            <span>[ our library ]</span>
+                            <h2 class="main-heading">Students and<br>  Clients we have worked</h2>
+                        </div>
+                        <div class="space-40"></div>
+                        <div class="project-filter-wrapper">
+                          <div class="projects-grid pf_3_cols style-1 img-scale w-auto m-0">
+                            {% for student in page_obj %}
+                              <div class="project-item category-20 ">
+                                  <div class="projects-box">
+                                      <div class="projects-thumbnail">
+                                          <a href="{{student.get_absolute_url}}">
+                                              <img src="{{student.image.url}}" alt="{{student.name}}">
+                                          </a>
+                                          <div class="overlay">
+                                              <h5>{{student.name}}</h5>
+                                              <i class="ot-flaticon-add"></i>
+                                          </div>
+                                      </div>
+                                      <div class="portfolio-info">
+                                          <div class="portfolio-info-inner">
+                                              <h5><a class="title-link" href="{{student.get_absolute_url}}">{{student.name}}</a></h5>
+                                              <p class="portfolio-cates"><a href="#">{{student.university.name}}</a></p>
+                                          </div>
+                                          <a class="overlay" href="{{student.get_absolute_url}}"></a>
+                                      </div>
+                                  </div>
+                              </div>
+                              {% endfor %}
+                          </div>
+
+                        </div>
+                        {% if page_obj.paginator %}
+                        {% if page_obj.has_next or page_obj.has_previous %}
+                        <ul class="page-pagination text-center mt-3 none-style">
+
+                          {% if page_obj.has_previous %}
+                            <li><a class="prev page-numbers" href="?page={{page_obj.previous_page_number}}">Prev</a></li>
+                            {% else %}
+
+                            {% endif %}
+
+                            {% for page in page_obj.paginator.page_range %}
+                            {% if page_obj.number == page %}
+                            <li class="active"><span>{{page}} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                            <li><a href="?page={{page}}">{{page}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li><a class="next page-numbers" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                            {% else %}
+
+                            {% endif %}
+
+                        </ul>
+                        {% else %}
+                        <div></div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}

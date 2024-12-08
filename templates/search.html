@@ -1,0 +1,72 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+
+        <div id="content" class="site-content">
+            <div class="page-header dtable text-center header-transparent pheader-portfolio">
+                <div class="dcell">
+                    <div class="container">
+                        <h1 class="page-title">Search results</h1>
+                        <ul id="breadcrumbs" class="breadcrumbs none-style">
+                            <li><a href="index.html">Home</a></li>
+                            <li class="active">Search results</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <div class="grid-lines grid-lines-vertical">
+                <span class="g-line-vertical line-left color-line-default"></span>
+                <span class="g-line-vertical line-right color-line-default"></span>
+            </div>
+            <div class="container">
+                <div class="row pb-50">
+                    <div class="col-lg-12 col-md-12 mb-4 mb-lg-0 text-center theratio-align-center">
+                        <div class="ot-heading is-dots">
+                            <span>[ results ]</span>
+                            {% if object_list %}
+                            <h2 class="main-heading">See Our University Programs</h2>
+                            {% else %}
+                            <h2 class="main-heading">No results found</h2>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                  {% for program in object_list %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="post-box masonry-post post-item">
+                            <div class="post-inner">
+                                <div class="entry-media post-cat-abs">
+                                    <a href="{{program.get_absolute_url}}"><img src="{{program.image.url}}" alt=""></a>
+                                    <div class="post-cat">
+                                        <div class="posted-in"><a href="{{program.subcategory.get_absolute_url}}">{{program.subcategory}}</a></div>
+                                    </div>
+                                </div>
+                                <div class="inner-post">
+                                    <div class="entry-header">
+                                        <div class="entry-meta">
+                                            <span class="posted-on"><a href="{{program.get_absolute_url}}">{{program.date}}</a></span>
+                                            <span class="byline">
+                                                <span class="author vcard"><a class="url fn n" href="{{program.get_absolute_url}}">{{program.author}}</a></span>
+                                            </span>
+                                        </div><!-- .entry-meta -->
+                                        <h5 class="entry-title">
+                                            <a class="title-link" href="{{program.get_absolute_url}}">{{program.name}}</a>
+                                        </h5>
+                                    </div><!-- .entry-header -->
+
+                                    <div class="the-excerpt">
+                                        {{program.description|truncatewords:15}}
+                                    </div><!-- .entry-content -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+{% endblock %}

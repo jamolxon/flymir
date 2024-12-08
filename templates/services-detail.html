@@ -1,0 +1,100 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+
+        <div id="content" class="site-content">
+            <div class="page-header dtable text-center header-transparent pheader-service-detail1">
+                <div class="dcell">
+                    <div class="container">
+                        <h1 class="page-title">{{service.name}}</h1>
+                        <ul id="breadcrumbs" class="breadcrumbs none-style">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="our-services.html">Our Services</a></li>
+                            <li class="active">{{service.name}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="services-single">
+            <div class="container">
+                <div class="row">
+                    <div class="widget-area col-lg-3 col-md-12">
+                        <div class="widget widget_nav_menu">
+                            <ul class="services-menu">
+                              {% for s in services %}
+                                <li class="current-menu-item"><a href="{{s.get_absolute_url}}"><span>{{s.service_order}}.</span> {{s.name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-12">
+                        <div class="services-detail-content">
+                            <div class="ot-heading ">
+                                <span>[ what we offer ]</span>
+                                <h2 class="main-heading">{{service.title}}</h2>
+                            </div>
+                            <img src="{{service.first_detail_image.url}}" class="detail-img" alt="">
+                          <p>{{service.text|safe}}</p>
+                            <img src="{{service.second_detail_image.url}}" class="detail-img" alt="">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-4 col-md-6 mb-3 mb-lg-0 text-center">
+                                    <div class="circle-progress tbottom" data-color="#939393" data-height="2" data-size="165" data-processed="true">
+                                        <div class="inner-bar" data-percent="50">
+                                            <span><span class="percent">{{service.first_criteria_percentage}}%</span></span>
+                                        </div>
+                                        <h4>{{service.first_criteria_title}}</h4>
+                                    </div>
+                                    <p>{{service.first_criteria_desc}}</p>
+                                </div>
+                                <div class="col-lg-4 col-md-6 mb-3 mb-lg-0 text-center">
+                                    <div class="circle-progress tbottom" data-color="#939393" data-height="2" data-size="165" data-processed="true">
+                                        <div class="inner-bar" data-percent="75">
+                                            <span><span class="percent">{{service.second_criteria_percentage}}%</span></span>
+                                        </div>
+                                        <h4>{{service.second_criteria_title}}</h4>
+                                    </div>
+                                    <p>{{service.second_criteria_desc}}</p>
+                                </div>
+                                <div class="col-lg-4 col-md-6 text-center">
+                                    <div class="circle-progress tbottom" data-color="#939393" data-height="2" data-size="165" data-processed="true">
+                                        <div class="inner-bar" data-percent="85">
+                                            <span><span class="percent">{{service.third_criteria_percentage}}%</span></span>
+                                        </div>
+                                        <h4>{{service.third_criteria_title}}</h4>
+                                    </div>
+                                    <p>{{service.third_criteria_desc}}</p>
+                                </div>
+                            </div>
+                            <div class="ot-heading is-dots service-testi">
+                                    <span>[ testimonials ]</span>
+                                <h2 class="main-heading">What People Say</h2>
+                            </div>
+                            <div class="ot-testimonials v-light">
+                                <div class="testimonial-inner ot-testimonials-slider-s1 owl-theme owl-carousel">
+                                  {% for review in reviews %}
+                                    <div class="testi-item">
+                                        <div class="ttext">
+                                            <div class="layer-behind"></div>
+                                            <span></span>
+                                            {{review.words|safe|truncatewords:50}}
+                                        </div>
+                                        <div class="t-head flex-middle">
+                                            <img src="{{review.image.url}}" alt="">
+                                            <div class="tinfo">
+                                                <h6>{{review.name}}</h6>
+                                                <span>{{review.position}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

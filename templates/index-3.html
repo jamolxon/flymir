@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {% if company %}
+    <section class="about-3 p-xl-0 pb-sm-0" style="margin-top: 50px;">
+        <div class="grid-lines grid-lines-vertical">
+            <span class="g-line-vertical line-left color-line-default"></span>
+            <span class="g-line-vertical line-right color-line-default"></span>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-5 mb-lg-0 align-self-center">
+                    <div class="about-img-3">
+                        <img src="{{company.image.url}}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 align-self-center">
+                    <div class="about-content-3 ml-xl-70">
+                        <div class="ot-heading">
+                            <span>[ about company ]</span>
+                            <h2 class="main-heading">{{company.title}}</h2>
+                        </div>
+                        <div class="space-20"></div>
+                        <div class="space-5"></div>
+                        <p>{{company.description|truncatewords:120}}</p>
+                        <div class="link-box">
+                            <a href="{% url 'consulting:about' %}" class="btn-details">READ MORE</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    {% if services or statistics %}
+    <section class="services-3" id="Services">
+        <div class="grid-lines grid-lines-vertical">
+            <span class="g-line-vertical line-left color-line-default"></span>
+            <span class="g-line-vertical line-right color-line-default"></span>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center theratio-align-center">
+                    <div class="ot-heading is-dots">
+                        <span>[ OUR SERVICES ]</span>
+                        <h2 class="main-heading">What Can We Offer</h2>
+                    </div>
+                    <div class="space-50"></div>
+                </div>
+            </div>
+            
+            {% if statistics %}
+            <div class="row" id="partners">
+                {% for statistic in statistics %}
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="ot-counter">
+                        <div>
+                            <span>[</span>
+                            <span class="num" data-to="{{statistic.value}}" data-time="1000">0</span>
+                            <span>+]</span>
+                        </div>
+                        <h6>{{statistic.title}}</h6>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        {% if partners%}
+        <div class="pb-0 pt-40">
+            <div class="container container-big">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="client-area-5">
+                            <div class="clients-slide owl-theme owl-carousel">
+                                {% for partner in partners %}
+                                <img src="{{partner.image.url}}" alt="">
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </section>
+    {% endif %}
+
+    {% if services %}
+    <section class="space-medium bg-dark-1" style="margin-top: -50px;">
+            <div class="container">
+                <div class="row justify-content-center">
+                {% for service in services%}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="icon-box icon-box--bg-color icon-box--icon-left">
+                        <div class="icon-main"><span class="{% if forloop.counter == 1 %} ot-flaticon-diamond {% endif %} {% if forloop.counter == 2%} ot-flaticon-box {% endif %} {% if forloop.counter == 3%} ot-flaticon-house {% endif %}"></span></div>
+                            <div class="content-box">
+                            <h5>{{service.title}}</h5>
+                            <p>{{service.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+    </section>
+    {% endif %}
+
+
+    <section>
+        <div class="grid-lines grid-lines-vertical">
+            <span class="g-line-vertical line-left color-line-default"></span>
+            <span class="g-line-vertical line-right color-line-default"></span>
+        </div>
+        <div class="container">
+            <div class="row pb-50">
+                <div class="col-lg-12 col-md-12 mb-4 mb-lg-0 text-center theratio-align-center">
+                    <div class="ot-heading is-dots">
+                        <span>[ programs ]</span>
+                        <h2 class="main-heading">See Our University Programs</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {% for program in programs %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="post-box masonry-post post-item">
+                        <div class="post-inner">
+                            <div class="entry-media post-cat-abs">
+                                <a href="{{program.get_absolute_url}}"><img src="{{program.home_image.url}}" alt=""></a>
+                                <div class="post-cat">
+                                    <div class="posted-in"><a href="{{program.subcategory.get_absolute_url}}">{{program.subcategory}}</a></div>
+                                </div>
+                            </div>
+                            <div class="inner-post">
+                                <div class="entry-header">
+                                    <div class="entry-meta">
+                                        <span class="posted-on"><a href="{{program.get_absolute_url}}">{{program.date}}</a></span>
+                                        <span class="byline">
+                                            <span class="author vcard"><a class="url fn n" href="{{program.get_absolute_url}}">{{program.author}}</a></span>
+                                        </span>
+                                    </div><!-- .entry-meta -->
+                                    <h5 class="entry-title">
+                                        <a class="title-link" href="{{program.get_absolute_url}}">{{program.name}}</a>
+                                    </h5>
+                                </div><!-- .entry-header -->
+
+                                <div class="the-excerpt">
+                                    {{program.description|truncatewords:15}}
+                                </div><!-- .entry-content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <center>
+                <a href="{% url 'consulting:program-list' %}" class="octf-btn octf-btn-dark border-hover-dark">View all</a>
+            </center>
+        </div>
+    </section>
+
+    <section class="our-skill-3 pb-0">
+        <div class="grid-lines grid-lines-vertical">
+            <span class="g-line-vertical line-left color-line-default"></span>
+            <span class="g-line-vertical line-right color-line-default"></span>
+        </div>
+        <div class="container-fluid px-0 px-xl-90 text-center theratio-align-center">
+            <div class="ot-heading is-dots">
+                <span>[students]</span>
+                <h2>Students That We Helped</h2>
+            </div>
+            <div class="space-50"></div>
+
+            <div class="project-slider-4item projects-grid style-2 no-gaps m-0 img-scale owl-theme owl-carousel">
+                {% for student in students %}
+                <div class="project-items category-19 ">
+                    <div class="projects-box">
+                        <div class="projects-thumbnail">
+                            <a href="{{student.get_absolute_url}}">
+                                <img src="{{student.image.url}}" alt="">
+                            </a>
+                            <div class="overlay">
+                                <h5>{{student.name}}</h5>
+                                <i class="ot-flaticon-add"></i>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <div class="portfolio-info-inner">
+                                <h5><a class="title-link" href="{{student.get_absolute_url}}">{{student.name}}</a></h5>
+                                <p class="portfolio-cates"><a href="#">{{student.university}}</a></p>
+                            </div>
+                            <a class="overlay" href="{{student.get_absolute_url}}"></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <center> <a href="{% url 'consulting:student-list' %}" class="octf-btn octf-btn-dark border-hover-dark mt-5">View all</a> </center>
+    </section>
+
+
+    {% verbatim %}
+    <!-- <section class="testi-3 py-0"> -->
+    <!--     <div class="grid-lines grid-lines-vertical"> -->
+    <!--         <span class="g-line-vertical line-left color-line-default"></span> -->
+    <!--         <span class="g-line-vertical line-right color-line-default"></span> -->
+    <!--     </div> -->
+    <!--     <div class="container-fluid px-xl-90"> -->
+    <!--         <div class="row mx-0"> -->
+    <!--             <div class="col-lg-6 px-0 align-self-center"> -->
+    <!--                 <div class="testi-img-3"> -->
+    <!--                     <img src="https://via.placeholder.com/869x640.png" alt=""> -->
+    <!--                 </div> -->
+    <!--             </div> -->
+    <!--             <div class="col-lg-6 px-0 mb-5 mb-xl-0"> -->
+    <!--                 <div class="testi-slide-block-3"> -->
+    <!--                     <div class="ot-heading is-dots"> -->
+    <!--                         <span>[ testimonials ]</span> -->
+    <!--                         <h2 class="main-heading">What People Say</h2> -->
+    <!--                     </div> -->
+    <!--                     <div class="space-20"></div> -->
+    <!--                     <div class="space-5"></div> -->
+    <!--                     <div class="ot-testimonials v-light"> -->
+    <!--                         <div class="testimonials-slide-2 s2 ot-testimonials-slider-s2 owl-theme owl-carousel"> -->
+    <!--                             {% for review in reviews %} -->
+    <!--                             <div class="testi-item"> -->
+    <!--                                 <div class="ttext"> -->
+    <!--                                     {{review.words|safe}} -->
+    <!--                                 </div> -->
+    <!--                                 <div class="t-head flex-middle"> -->
+    <!--                                     <div class="tinfo"> -->
+    <!--                                         <h5>{{review.name}}</h5> -->
+    <!--                                         <span>{{review.position}}</span> -->
+    <!--                                     </div> -->
+    <!--                                 </div> -->
+    <!--                             </div> -->
+    <!--                             {% endfor %} -->
+    <!--                         </div> -->
+    <!--                     </div> -->
+    <!--                 </div> -->
+    <!--             </div> -->
+    <!--         </div> -->
+    <!--     </div> -->
+    <!-- </section> -->
+
+    {% endverbatim %}
+
+    <section>
+        <div class="grid-lines grid-lines-vertical">
+            <span class="g-line-vertical line-left color-line-default"></span>
+            <span class="g-line-vertical line-right color-line-default"></span>
+        </div>
+        <div class="container">
+            <div class="row pb-50">
+                <div class="col-lg-12 col-md-12 mb-4 mb-lg-0 text-center theratio-align-center">
+                    <div class="ot-heading is-dots">
+                        <span>[ our blog ]</span>
+                        <h2 class="main-heading">Read Our Latest News</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                {% for n in news_posts %}
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="post-box masonry-post post-item">
+                        <div class="post-inner">
+                            <div class="entry-media post-cat-abs">
+                                <a href="{{n.get_absolute_url}}"><img src="{{n.home_image.url}}" alt=""></a>
+                                <div class="post-cat">
+                                    <div class="posted-in"><a href="{{n.category.get_absolute_url}}">{{n.category}}</a></div>
+                                </div>
+                            </div>
+                            <div class="inner-post">
+                                <div class="entry-header">
+                                    <div class="entry-meta">
+                                        <span class="posted-on"><a href="{{n.get_absolute_url}}">{{n.date}}</a></span>
+                                        <span class="byline">
+                                            <span class="author vcard"><a class="url fn n" href="{{n.get_absolute_url}}">{{n.author}}</a></span>
+                                        </span>
+                                    </div><!-- .entry-meta -->
+
+                                    <h5 class="entry-title">
+                                        <a class="title-link" href="{{n.get_absolute_url}}">{{n.name}}</a>
+                                    </h5>
+                                </div><!-- .entry-header -->
+
+                                <div class="the-excerpt">
+                                    {{n.description|truncatewords:15}}
+                                </div><!-- .entry-content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <center> 
+                <a href="{% url 'consulting:news-list' %}" class="octf-btn octf-btn-dark border-hover-dark">View all</a>
+            </center>
+        </div>
+    </section>
+
+    {% endblock %}

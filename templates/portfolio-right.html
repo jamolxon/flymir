@@ -1,0 +1,135 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+        <div id="content" class="site-content">
+            <div class="page-header dtable text-center header-transparent pheader-portfolio-detail">
+                <div class="dcell">
+                    <div class="container">
+                        <h1 class="page-title">Students we have worked with</h1>
+                        <ul id="breadcrumbs" class="breadcrumbs none-style">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="portfolio-masonry.html">Portfolio</a></li>
+                            <li class="active">Stylish Family Appartment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <section class="portfolio-detail p-0">
+                <div class="container">
+                    <div class="row">
+                        <div class="space-90"></div>
+                        <div class="col-lg-6 col-md-12">
+                            <h4>Design in Details</h4>
+                            <p><span class="drop-cap"><span class="drop-cap-letter">{{student.capital_letter}}</span></span>{{student.text|safe}}</p>
+                            <div class="space-20"></div>
+                            <div class="space-5"></div>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>Organisation:</h6>
+                                        <p>FlyMir</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>Client:</h6>
+                                        <p>{{student.name}}</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>Country:</h6>
+                                        <p>{{student.country.name}}</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>University:</h6>
+                                        <p>{{student.university.name}}</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>Program:</h6>
+                                        <p>{{student.program_title}}</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-6">
+                                    <div class="p-detail-info">
+                                        <h6>Date:</h6>
+                                        <p>{{student.date}}</p>
+                                    </div>
+                                    <div class="space-20"></div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="text-left share-portfolio">
+                                        <a class="twit" target="_blank" href="twitter.com" title="Twitter"><i class="fab fa-twitter"></i></a>
+                                        <a class="face" target="_blank" href="facebook.com" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                        <a class="pint" target="_blank" href="pinterest.com" title="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+                                        <a class="linked" target="_blank" href="linkedin.com" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+                            <div class="image-gallery">
+                                <div id="gallery-2" class="gallery gallery-columns-1 s2">
+                                    <figure class="gallery-item">
+                                        <div class="gallery-icon portrait">
+                                            <a href="">
+                                                <img src="{{student.detail_image.url}}" alt="">
+                                                <span class="overlay"><i class="ot-flaticon-add"></i></span>
+                                            </a>
+                                        </div>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="project-bottom">
+                                <div class="portfolio-related-posts-wrap">
+                                    <div class="portfolio-related-title-wrap">
+                                        <h2 class="portfolio-related-title">Other Students</h2>
+                                    </div>
+                                    <div class="row">
+                                        <div class="projects-grid pf_3_cols style-1 img-scale w-auto m-0">
+                                          {% for student in students %}
+                                            <div class="project-item category-20 ">
+                                                <div class="projects-box">
+                                                    <div class="projects-thumbnail">
+                                                        <a href="{{student.get_absolute_url}}">
+                                                            <img src="{{student.image.url}}" alt="">
+                                                        </a>
+                                                        <div class="overlay">
+                                                            <h5>{{student.name}}</h5>
+                                                            <i class="ot-flaticon-add"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="portfolio-info">
+                                                        <div class="portfolio-info-inner">
+                                                            <h5><a class="title-link" href="{{student.get_absolute_url}}">{{student.name}}</a></h5>
+                                                            <p class="portfolio-cates"><a href="{{student.university.get_absolute_url}}">{{student.university.name}}</a></p>
+                                                        </div>
+                                                        <a class="overlay" href="{{student.get_absolute_url}}"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    {% endblock %}

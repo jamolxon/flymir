@@ -1,0 +1,393 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <title>{{settings.title}}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/fly1.svg' %}" />
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/owl.theme.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/lightgallery.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/woocommerce.css' %}" />
+
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    </head>
+
+    <body>
+        <div id="page" class="site">
+            <header id="site-header" class="site-header header-static">
+                <!-- Main Header start -->
+                <div class="header-topbar style-2 d-none d-lg-block">
+                    <div class="octf-area-wrap">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 align-self-center">
+                                    <div class="topbar-socials list-social">
+                                        <ul>
+                                            <li><a href="{{settings.facebook_url}}" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="{{settings.instagram_url}}" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                                            <li><a href="{{settings.telegram_url}}" target="_blank"><i class="fab fa-telegram"></i></a></li>
+                                            <li><a href="mailto:{{settings.email}}" target="_blank"><i class="fa fa-inbox"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <ul class="topbar-info d-flex mb-0 justify-content-end clearfix">
+                                        <li><i class="ot-flaticon-place"></i>{{settings.address}}</li>
+                                        <li>
+                                            <a href="tel:{{settings.phone_number}}"><i class="fa fa-phone-alt"></i>
+                                                {{ settings.phone_number|slice:":4" }} {{ settings.phone_number|slice:"4:6" }} 
+                                                {{ settings.phone_number|slice:"6:9" }} {{ settings.phone_number|slice:"9:11" }} 
+                                                {{ settings.phone_number|slice:"11:" }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="octf-main-header main-header-slight header-4 main-header-5">
+                    <div class="octf-area-wrap">
+                        <div class="container octf-mainbar-container">
+                            <div class="octf-mainbar">
+                                <div class="octf-mainbar-row octf-row">
+                                    <div class="octf-col logo-col">
+                                        <div id="site-logo" class="site-logo">
+                                            <a href="{% url 'consulting:home' %}">
+                                                <img src="/static/images/fly1.svg" style="width: 85px; height:85px; margin-left: 15px; margin-top: 15px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="octf-col menu-col">
+                                        <nav id="site-navigation" class="main-navigation nav-text-dark">
+                                            <ul class="menu">
+                                                <li>
+                                                    <a href="{% url 'consulting:home' %}">Home</a>
+                                                </li>
+                                                <li><a href="{% url 'consulting:about' %}">About</a>
+                                                </li>
+                                                <li class="menu-item-has-children"><a href="{% url 'consulting:news-list' %}">News</a>
+
+                                                    <ul class="sub-menu">
+                                                        {% for n in news_category %}
+                                                        {% if n.name %}
+                                                        <li><a href="{% url 'consulting:category-news-list' n.slug %}">{{n.name}}</a></li>
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                                <li><a href="{% url 'consulting:home' %}#Services">Services</a></li>
+
+                                                <li><a href="{% url 'consulting:home' %}#partners">Partners</a>
+
+                                                <li class="menu-item-has-children"><a href="{% url 'consulting:program-list' %}">Programs</a>
+                                                    <ul class="sub-menu">
+                                                        {% for category in categories %}
+                                                        <li class="menu-item-has-children"><a href="#">{{category.name}}</a>
+                                                            {% if category.subcategories.all %}
+                                                            <ul class="sub-menu">
+                                                                {% for s in category.subcategories.all %}
+                                                                <li><a href="{{s.get_absolute_url}}">{{s.name}}</a></li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                            {% endif %}
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                                <li><a href="{% url 'consulting:student-list' %}">Students</a>
+
+                                                </li>
+                                                <li><a href="{% url 'consulting:contact' %}">Contact</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <div class="octf-col cta-col text-right">
+                                        <!-- Call To Action -->
+                                        <div class="octf-btn-cta">
+
+                                            <div class="octf-search octf-cta-header">
+                                                <div class="toggle_search octf-cta-icons">
+                                                    <i class="ot-flaticon-search"></i>
+                                                </div>
+                                                <!-- Form Search on Header -->
+                                                <div class="h-search-form-field collapse">
+                                                    <div class="h-search-form-inner">
+                                                        <form role="search" action="{% url 'consulting:program-search' %}" method="get" class="search-form">
+                                                            <input type="search" class="search-field" placeholder="Search..." value="" name="search">
+                                                            <button type="submit" class="search-submit"><i class="ot-flaticon-search"></i></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header_mobile">
+                    <div class="container-fluid">
+                        <div class="octf-mainbar-row octf-row">
+                            <div class="octf-col">
+                                <div class="mlogo_wrapper clearfix">
+                                    <div class="mobile_logo">
+                                        <a href="{% url 'consulting:home' %}">
+                                            <img src="/static/images/fly1.svg" style="width: 85px; height:85px; margin-left: 15px; margin-top: 15px;">
+                                                <!-- <img src="/static/images/logo.svg" alt="FlyMir"> -->
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="octf-col justify-content-end">
+                                <div class="octf-search octf-cta-header">
+                                    <div class="toggle_search octf-cta-icons">
+                                        <i class="ot-flaticon-search" style="color: black;"></i>
+                                    </div>
+                                    <!-- Form Search on Header -->
+                                    <div class="h-search-form-field collapse">
+                                        <div class="h-search-form-inner">
+                                            <form role="search" action="{% url 'consulting:program-search' %}" method="get" class="search-form">
+                                                <input type="search" class="search-field" placeholder="Search..." value="" name="search">
+                                                <button type="submit" class="search-submit"><i class="ot-flaticon-search"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="octf-menu-mobile octf-cta-header">
+                                    <div id="mmenu-toggle" class="mmenu-toggle">
+                                        <button><i class="ot-flaticon-menu" style="color: black;"></i></button>
+                                    </div>
+                                    <div class="site-overlay mmenu-overlay"></div>
+                                    <div id="mmenu-wrapper" class="mmenu-wrapper on-right">
+                                        <div class="mmenu-inner">
+                                            <a class="mmenu-close" href="#"><i class="ot-flaticon-right-arrow"></i></a>
+                                            <div class="mobile-nav">
+                                                <ul id="menu-main-menu" class="mobile_mainmenu none-style">
+                                                    <li class="current-menu-item current-menu-ancestor">
+                                                        <a href="{% url 'consulting:home' %}">Home</a>
+                                                    </li>
+                                                    <li><a href="{% url 'consulting:about' %}">About</a>
+                                                    </li>
+                                                    <li class="menu-item-has-children"><a href="{% url 'consulting:news-list' %}">News</a>
+
+                                                        <ul class="sub-menu">
+                                                            {% for n in news_category %}
+                                                            {% if n.name %}
+                                                            <li><a href="{{n.get_absolute_url}}">{{n.name}}</a></li>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="{% url 'consulting:home' %}#Services">Services</a></li>
+
+                                                    <li><a href="{% url 'consulting:home' %}#partners">Partners</a>
+
+                                                    <li class="menu-item-has-children"><a href="{% url 'consulting:home' %}">Programs</a>
+                                                        <ul class="sub-menu">
+                                                            {% for category in categories %}
+                                                            <li class="menu-item-has-children"><a href="#">{{category.name}}</a>
+                                                                {% if category.subcategory_set.all %}
+                                                                <ul class="sub-menu">
+                                                                    {% for s in category.subcategory_set.all %}
+                                                                    <li><a href="{{s.get_absolute_url}}">{{s.name}}</a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                                {% endif %}
+                                                            </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
+                                                    <li><a href="{% url 'consulting:student-list' %}">Students</a>
+
+                                                    </li>
+                                                    <li><a href="{% url 'consulting:contact' %}">Contact</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <div id="content" class="site-content">
+                <section class="banner-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-8 col-lg-12">
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == "success" %}
+                                <div class="message-box">
+                                    <div class="icon-main success"><span class="ot-flaticon-check-mark-black-outline"></span></div>
+                                    <div class="content-box">
+                                        <h6>Success</h6>
+                                        <p>{{message}}.</p>
+                                    </div>
+                                    <i class="ot-flaticon-close"></i>
+                                </div>
+                                {% else %}
+                                <div class="message-box">
+                                    <div class="icon-main danger"><span class="ot-flaticon-close"></span></div>
+                                    <div class="content-box">
+                                        <h6>Error</h6>
+                                        <p>{{message}}.</p>
+                                    </div>
+                                    <i class="ot-flaticon-close"></i>
+                                </div>
+                                {% endif %}
+                                <div class="space-30"></div>
+                                {% endfor %}
+                                {% endif %}
+                                <h2>{{header.title}}</h2>
+                                <!-- <div class="video-popup s-dark flex-middle justify-content-start"> -->
+                                <!-- <div class="banner-desc-4" style="color:black;"> -->
+                                <p style="font-size: 20px;">{{header.description}}</p>
+                                <!-- </div> -->
+                                <div class="ot-button">
+                                    <a href="" class="octf-btn octf-btn-dark border-hover-dark">View Programs</a>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {% if features %}
+                <section class="feature-4" style="margin-bottom: 50px;">
+                    <div class="container">
+                        <div class="feature-wrap">
+                            {% for feature in features %}
+                            <div class="feature-item">
+                                <h6 class="number">{{forloop.counter}}.</h6>
+                                <p style="color:grey;">{{feature.description}}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                {% if flags %}
+                <div class="pb-0 pt-40">
+                    <div class="container container-big">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="client-area-5">
+                                    <div class="clients-slide owl-theme owl-carousel">
+                                        {% for flag in flags %}
+                                        <a href="{{flag.subcategory.get_absolute_url}}"><img src="{{flag.image.url}}" alt="{{flag.subcategory.name}}" style="border: 1px solid black;"></a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            {% block content %}
+            {% endblock %}
+
+            <footer id="site-footer" class="site-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-4 mb-xl-0">
+                            <div class="widget-footer">
+                                <p style="margin-top: 15px;">{{header.title}}</p>
+                                <p>{{header.description}}</p>
+                                <div class="footer-social list-social">
+                                    <ul>
+                                        <li><a href="{{settings.facebook_url}}" target="_self"><i class="fab fa-facebook-f"></i></a></li>
+                                        <li><a href="{{settings.instagram_url}}" target="_self"><i class="fab fa-instagram"></i></a></li>
+                                        <li><a href="{{settings.telegram_url}}" target="_self"><i class="fab fa-telegram"></i></a></li>
+                                        <li><a href="mailto:{{settings.email}}" target="_self"><i class="fas fa-inbox"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-4 mb-xl-0">
+                            <div class="widget-footer">
+                                <h6>Contacts</h6>
+                                <ul class="footer-list">
+                                    <li class="footer-list-item">
+                                        <span class="list-item-icon"><i class="ot-flaticon-place"></i></span> {{settings.address}}
+                                    </li>
+                                    <li class="footer-list-item">
+                                        <span class="list-item-icon"><i class="ot-flaticon-mail"></i></span>&nbsp;  {{settings.email}}
+                                    </li>
+                                    <li class="footer-list-item">
+                                        <span class="list-item-icon"><i class="ot-flaticon-phone-call"></i></span> {{settings.phone_number}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-4 mb-md-0">
+                            <div class="widget-footer widget-contact">
+                                <h6>Latest Projects</h6>
+                                <ul>
+                                    {% for service in services%}
+                                    <li><a href="javascript:void(0)">{{service.title}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
+                            <div class="widget-footer footer-widget-subcribe">
+                                <h6>Order a call</h6>
+                                <form method="POST" class="mc4wp-form" action="{% url 'consulting:order-call' %}">
+                                    {% csrf_token %}
+                                    <div class="mc4wp-form-fields">
+                                        <div class="subscribe-inner-form">
+                                            <input type="text" name="phone" placeholder="YOUR PHONE" required="" style="background:inherit;">
+                                            <button type="submit" class="subscribe-btn-icon"><i class="ot-flaticon-send"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <p>Leave your phone above to get contacted by our agency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer><!-- #site-footer -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 mb-4 mb-lg-0">
+                            <p style="text-align: center;">Copyright © 2024. Made with &#10084; by <a class="text-light" href="https://t.me/akhmedofffffff">Jamolkhon Akhmedov</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- #page -->
+        <a id="back-to-top" href="#" class="show"><i class="ot-flaticon-left-arrow"></i></a>
+        <!-- jQuery -->
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/mousewheel.min.js' %}"></script>
+        <script src="{% static 'js/lightgallery-all.min.js' %}"></script>
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+        <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'js/easypiechart.min.js' %}"></script>
+        <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+
+
+    </body>
+</html>
