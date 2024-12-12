@@ -74,23 +74,28 @@
                                                 </li>
                                                 <li><a href="{% url 'consulting:about' %}">About</a>
                                                 </li>
+
+                                                {% if news_categories %}
                                                 <li class="menu-item-has-children"><a href="{% url 'consulting:news-list' %}">News</a>
 
                                                     <ul class="sub-menu">
-                                                        {% for n in news_category %}
-                                                        {% if n.name %}
-                                                        <li><a href="{% url 'consulting:category-news-list' n.slug %}">{{n.name}}</a></li>
+                                                        {% for news in news_categories %}
+                                                        {% if news.name %}
+                                                        <li><a href="{% url 'consulting:category-news-list' news.slug %}">{{news.name}}</a></li>
                                                         {% endif %}
                                                         {% endfor %}
                                                     </ul>
                                                 </li>
+                                                {% endif %}
+
                                                 <li><a href="{% url 'consulting:home' %}#Services">Services</a></li>
 
                                                 <li><a href="{% url 'consulting:home' %}#partners">Partners</a>
 
+                                                    {% if program_categories %}
                                                 <li class="menu-item-has-children"><a href="{% url 'consulting:program-list' %}">Programs</a>
                                                     <ul class="sub-menu">
-                                                        {% for category in categories %}
+                                                        {% for category in program_categories %}
                                                         <li class="menu-item-has-children"><a href="#">{{category.name}}</a>
                                                             {% if category.subcategories.all %}
                                                             <ul class="sub-menu">
@@ -103,6 +108,8 @@
                                                         {% endfor %}
                                                     </ul>
                                                 </li>
+                                                {% endif %}
+
                                                 <li><a href="{% url 'consulting:student-list' %}">Students</a>
 
                                                 </li>
@@ -180,16 +187,19 @@
                                                     </li>
                                                     <li><a href="{% url 'consulting:about' %}">About</a>
                                                     </li>
+                                                    {% if news_categories %}
                                                     <li class="menu-item-has-children"><a href="{% url 'consulting:news-list' %}">News</a>
 
                                                         <ul class="sub-menu">
-                                                            {% for n in news_category %}
-                                                            {% if n.name %}
-                                                            <li><a href="{{n.get_absolute_url}}">{{n.name}}</a></li>
+                                                            {% for news in news_categories %}
+                                                            {% if news.name %}
+                                                            <li><a href="{% url 'consulting:category-news-list' news.slug %}">{{news.name}}</a></li>
                                                             {% endif %}
                                                             {% endfor %}
                                                         </ul>
                                                     </li>
+                                                    {% endif %}                                                    
+
                                                     <li><a href="{% url 'consulting:home' %}#Services">Services</a></li>
 
                                                     <li><a href="{% url 'consulting:home' %}#partners">Partners</a>
@@ -340,7 +350,7 @@
                         </div>
                         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-4 mb-md-0">
                             <div class="widget-footer widget-contact">
-                                <h6>Latest Projects</h6>
+                                <h6>What we offer</h6>
                                 <ul>
                                     {% for service in services%}
                                     <li><a href="javascript:void(0)">{{service.title}}</a></li>

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic.base import View
 from django.views.generic import ListView
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from consulting import models
 from consulting import forms
@@ -17,16 +17,18 @@ class HomeView(View):
         settings = models.Settings.objects.last()
         features = models.Feature.objects.all().order_by("id")[:4]
         statistics = models.Statistics.objects.all()[:4]
+        blogs = models.News.objects.all().order_by("-id")[:4]
 
         context = {
                 "company": company,
                 "settings": settings,
                 "features": features,
                 "statistics": statistics,
+                "programs": None,
+                "students": None,
+                "blogs": blogs,
                 }
         return render(request, 'index-3.html', context)
-
- 
 
 
 class AboutView(View):
@@ -52,27 +54,6 @@ class AboutView(View):
         }
 
         return render(request, 'about-us.html', context)
-
-
-class NewsSearchView(ListView):
-	model = models.News
-	template_name = 'news-search.html'
-
-	def get_queryset(self):
-		query = self.request.GET.get('search', None)
-		object_list = models.News.objects.filter(
-			Q(name__icontains = query) | Q(description__icontains = query) | Q(author__icontains = query)
-			)
-		return object_list
-
-
-class ProgramSearchView(View):
-    def get(self, request):
-        query = request.GET.get('search', None)
-        object_list = models.Programs.objects.filter(Q(name__icontains = query) | Q(description__icontains = query) |
-        Q(author__icontains = query) | Q(date__icontains = query)
-        )
-        return render(request, 'search.html', {'object_list':object_list})
 
 
 class StudentListView(View):
@@ -101,40 +82,56 @@ class StudentDetailView(View):
 
 class NewsListView(View):
     def get(self, request):
-        news = models.News.objects.all()
-        paginator = Paginator(news, 6)
+        news = models.News.objects.all().order_by("-id")
+        paginator = Paginator(news, 9)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context = {
             'page_obj':page_obj,
         }
-        return render(request, 'blog-grid.html', context)
+        return render(request, 'news.html', context)
 
 
 class CategoryNewsView(View):
     def get(self, request, slug):
         category = get_object_or_404(models.NewsCategory, slug=slug)
-        news = models.News.objects.filter(category=category)
-        paginator = Paginator(news, 6)
+        news = models.News.objects.filter(category=category).order_by("-id")
+        paginator = Paginator(news, 9)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context = {
+            'category': category,
             'page_obj':page_obj,
         }
-        return render(request, 'blog-category.html', context)
+        return render(request, 'news-category.html', context)
 
 
 class NewsDetailView(View):
     def get(self, request, slug):
-        news = get_object_or_404(models.News, slug=slug)
-        related_news = models.News.objects.all().order_by('-id')[:3]
-        category = models.NewsCategory.objects.all()
+        news = models.News.objects.annotate(comment_count=Count("comments")).get(slug=slug)
+        related_news = models.News.objects.exclude(slug=slug).filter(category=news.category).order_by('-id')[:3]
+        recent_news = models.News.objects.exclude(slug=slug).exclude(category=news.category).order_by('-id')[:5]
+        category = models.NewsCategory.objects.all().annotate(count=Count("news"))
+
         context = {
             'news':news,
             'related_news':related_news,
-            'category':category,
+            'recent_news':recent_news,
+            'categories': category,
         }
-        return render(request, 'post.html', context)
+        return render(request, 'news-detail.html', context)
+
+
+class NewsSearchView(ListView):
+	model = models.News
+	template_name = 'news-search.html'
+
+	def get_queryset(self):
+		query = self.request.GET.get('search', None)
+		object_list = models.News.objects.filter(
+			Q(name__icontains = query) | Q(description__icontains = query) | Q(author__icontains = query)
+            ).order_by("-id")[:24]
+		return object_list
 
 
 class AddCommentView(View):
@@ -151,7 +148,7 @@ class AddCommentView(View):
                 return HttpResponseRedirect(reverse('consulting:news-detail', kwargs={'slug': news.slug}))
         else:
             form = forms.CommentForm()
-        return render(request, 'post.html', {'form':form})
+        return render(request, 'news-detail.html', {'form':form})
 
 
 class ProgramListView(View):
@@ -202,6 +199,15 @@ class ProgramDetailView(View):
         return render(request, 'portfolio-standar.html', context)
 
 
+class ProgramSearchView(View):
+    def get(self, request):
+        query = request.GET.get('search', None)
+        object_list = models.Programs.objects.filter(Q(name__icontains = query) | Q(description__icontains = query) |
+        Q(author__icontains = query) | Q(date__icontains = query)
+        )
+        return render(request, 'search.html', {'object_list':object_list})
+
+
 class ContactView(View):
     def get(self, request):
         form = forms.ContactForm()
@@ -215,8 +221,10 @@ class ContactView(View):
         if form.is_valid():
             form.save()
             form = forms.ContactForm()
+            messages.add_message(request, messages.SUCCESS, 'We received your phone number. We will call you as soon as possible.')
         else:
             form = forms.ContactForm()
+            messages.add_message(request, messages.WARNING, 'We failed to receive your number. Please try again!')
         return render(request, 'contact.html', {'form':form,})
 
 

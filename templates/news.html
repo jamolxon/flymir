@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-        <div id="content" class="site-content" style="margin-top: -200px;">
+    <div id="content" class="site-content" style="margin-top: -200px;">
         <div class="page-header dtable text-center header-transparent pheader-about">
             <div class="dcell">
                 <div class="container">
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-        <div class="entry-content">
+        <div class="entry-content" style="margin-top: -150px;">
             <div class="container">
                 <div class="row">
                   {% for news in page_obj %}
@@ -20,9 +20,9 @@
                         <div class="post-box masonry-post post-item">
                             <div class="post-inner">
                                 <div class="entry-media post-cat-abs">
-                                    <a href="{% url 'consulting:news-detail' news.slug %}"><img src="{{news.home_image.url}}" alt=""></a>
+                                    <a href="{% url 'consulting:news-detail' news.slug %}"><img src="{{news.image.url}}" alt=""></a>
                                     <div class="post-cat">
-                                        <div class="posted-in"><a href="{{news.category.get_absolute_url}}">{{news.category.name}}</a></div>
+                                        <div class="posted-in"><a href="{% url 'consulting:category-news-list' news.category.slug %}">{{news.category.name}}</a></div>
                                     </div>
                                 </div>
                                 <div class="inner-post">
@@ -30,17 +30,17 @@
                                         <div class="entry-meta">
                                             <span class="posted-on"><a href="{% url 'consulting:news-detail' news.slug %}">{{news.date}}</a></span>
                                             <span class="byline">
-                                                <span class="author vcard"><a class="url fn n" href="#">{{news.author}}</a></span>
+                                                <span class="author vcard"><a class="url fn n" href="{% url 'consulting:news-detail' news.slug %}">{{news.author}}</a></span>
                                             </span>
                                         </div><!-- .entry-meta -->
 
                                         <h5 class="entry-title">
-                                            <a class="title-link" href="{{news.get_absolute_url}}">{{news.name}}</a>
+                                            <a class="title-link" href="{% url 'consulting:news-detail' news.slug %}">{{news.name}}</a>
                                         </h5>
                                     </div><!-- .entry-header -->
 
                                     <div class="the-excerpt">
-                                        {{news.text|safe|truncatewords:10}}
+                                        {{news.description|truncatewords:15}}
                                     </div><!-- .entry-content -->
                                 </div>
                             </div>

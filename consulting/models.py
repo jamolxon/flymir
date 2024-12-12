@@ -47,7 +47,7 @@ class Contact(BaseModel):
         verbose_name_plural = _("contacts")
 
     def __str__(self):
-        return f"{self.name} has contacted."
+        return f"{self.name}"
 
 
 class NewsCategory(BaseModel):
@@ -67,45 +67,36 @@ class News(BaseModel):
     name = models.CharField(_("name"), max_length=256)
     slug = models.SlugField(_("slug"), max_length=256, unique=True, blank=True, null=True)
     description = models.TextField(_("description"))
+    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, null=True, verbose_name=_("category"), related_name="news")
     author = models.CharField(_("author"), max_length=256)
-    home_image = models.ImageField('Home Page Image', help_text='Size: 570x484', upload_to='news_shots/')
-    detail_image = models.ImageField('Inner Page Image', help_text='Size: 790x510', upload_to='news_shots/')
-    related_image = models.ImageField('Related News Image', help_text='Size: 150x150', upload_to='programs/')
-    author_name = models.CharField('Author name', max_length=70)
-    author_image = models.ImageField('Image', help_text='Size: 270x370', upload_to='news_shots/')
-    author_text = models.CharField('Author\'s words', max_length=70)
-    author_instagram = models.CharField('Instagram link', max_length=100)
-    author_facebook = models.CharField('Facebook link', max_length=100)
-    author_telegram = models.CharField('Telegram link', max_length=100)
-    capital_letter = models.CharField('Capital letter', max_length=10)
-    text = RichTextField('Article',)
-    date = models.DateTimeField('Date', auto_now_add=True)
-    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, null=True, verbose_name='CategoryNews')
-
-    def __str__(self):
-        return f"{self.name} has been added to news"
+    image = ResizedImageField(_("image"), size=[790, 510], crop=["middle", "center"], quality=95, help_text="preferred size: 790x510", upload_to="news/%Y/%m")
+    date = models.DateTimeField(_("date"), auto_now_add=True)
+    text = RichTextField(_("text"))
 
     class Meta:
-        verbose_name = 'News'
-        verbose_name_plural = 'News'
-
-
-# Comments Model
-class Comments(models.Model):
-    name = models.CharField('Name', max_length=100)
-    phone = models.CharField('Phone number', max_length=13, blank=True)
-    message = models.TextField('Message',)
-    parent = models.ForeignKey('self', verbose_name = 'parent', on_delete=models.SET_NULL, null=True, blank=True)
-    news = models.ForeignKey(News, on_delete=models.CASCADE, null=True, related_name='news_comments')
-    date = models.DateTimeField('Date', auto_now_add=True)
+        db_table = "news"
+        verbose_name = _("news")
+        verbose_name_plural = _("news")
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
+
+class Comment(models.Model):
+    name = models.CharField(_("name"), max_length=256)
+    message = models.TextField(_("message"))
+    parent = models.ForeignKey('self', verbose_name = 'parent', on_delete=models.SET_NULL, null=True, blank=True, related_name="children")
+    news = models.ForeignKey(News, on_delete=models.CASCADE, null=True, related_name='comments', verbose_name=_("news"))
+    date = models.DateTimeField(_("date"), auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Comment'
-        verbose_name_plural = 'Comments'
-        ordering = ['id']
+        db_table = "comment"
+        ordering = ["-id"]
+        verbose_name = _("comment")
+        verbose_name_plural = _("comments")
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 # Programs Model
@@ -165,19 +156,6 @@ class Students(models.Model):
     class Meta:
         verbose_name = 'Student'
         verbose_name_plural = 'Students'
-
-
-# Partners Model
-class Partners(models.Model):
-    name = models.CharField('Name', max_length=100)
-    image = models.ImageField('Image', help_text='Size: 300x145', upload_to='partners/')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Partner'
-        verbose_name_plural = 'Partners'
 
 
 class Header(BaseModel):
@@ -333,6 +311,19 @@ class Call(BaseModel):
 
     def __str__(self):
         return f"{self.phone_number}"
+
+
+# Partners Model
+class Partners(models.Model):
+    name = models.CharField('Name', max_length=100)
+    image = models.ImageField('Image', help_text='Size: 300x145', upload_to='partners/')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Partner'
+        verbose_name_plural = 'Partners'
 
 
 # class Flag(models.Model):

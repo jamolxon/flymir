@@ -1,13 +1,16 @@
 from django.forms import ModelForm, Textarea
-from .models import Comments, Contact
+
+from consulting.models import Comment, Contact
+
 
 class CommentForm(ModelForm):
     class Meta:
-        model = Comments
-        fields = ('name', 'phone', 'message')
+        model = Comment
+        fields = ('name', 'message')
         widgets = {
             'message': Textarea(attrs={'cols': 30, 'rows': 8}),
         }
+
 
 class ContactForm(ModelForm):
     class Meta:

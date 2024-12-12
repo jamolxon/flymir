@@ -17,6 +17,8 @@ admin.site.register(models.Team)
 admin.site.register(models.Review)
 admin.site.register(models.Statistics)
 admin.site.register(models.Service)
+admin.site.register(models.Comment)
+admin.site.register(models.Contact)
 
 
 # @admin.register(Categories)

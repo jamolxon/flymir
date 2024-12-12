@@ -6,7 +6,7 @@
         <div class="page-header dtable text-center header-transparent pheader-about">
             <div class="dcell">
                 <div class="container">
-                    <h1 class="page-title" style="color: black;">News Search Results</h1>
+                    <h1 class="page-title" style="color: black;">{{category.name}} News</h1>
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
     <div class="entry-content" style="margin-top: -150px;">
         <div class="container">
             <div class="row">
-                {% for news in object_list %}
+                {% for news in page_obj %}
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="post-box masonry-post post-item">
                         <div class="post-inner">
@@ -48,6 +48,35 @@
                 </div>
                 {% endfor %}
             </div>
+            {% if page_obj.paginator %}
+            {% if page_obj.has_next or page_obj.has_previous %}
+            <ul class="page-pagination text-center mt-3 none-style">
+
+                {% if page_obj.has_previous %}
+                <li><a class="prev page-numbers" href="?page={{page_obj.previous_page_number}}">Prev</a></li>
+                {% else %}
+
+                {% endif %}
+
+                {% for page in page_obj.paginator.page_range %}
+                {% if page_obj.number == page %}
+                <li class="active"><span>{{page}} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a href="?page={{page}}">{{page}}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li><a class="next page-numbers" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                {% else %}
+
+                {% endif %}
+
+            </ul>
+            {% else %}
+            <div></div>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 

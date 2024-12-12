@@ -2,26 +2,46 @@
 {% load static %}
 {% block content %}
 
-        <div id="content" class="site-content">
-            <div class="page-header dtable text-center header-transparent page-header-contact">
-                <div class="dcell">
-                    <div class="container">
-                        <h1 class="page-title">Contact</h1>
-                        <ul id="breadcrumbs" class="breadcrumbs none-style">
-                            <li><a href="index.html">Home</a></li>
-                            <li class="active">Contacts</li>
-                        </ul>
-                    </div>
+        <div id="content" class="site-content" style="margin-top: -200px;">
+        <div class="page-header dtable text-center header-transparent pheader-about">
+            <div class="dcell">
+                <div class="container">
+                    <h1 class="page-title" style="color: black;">Contact</h1>
                 </div>
             </div>
         </div>
+    </div>
 
-        <section class="contact-page">
+        <section class="contact-page" style="margin-top: -150px;">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 align-self-center mb-5 mb-lg-0">
                         <div class="contact-left">
                             <h2>Get in Touch</h2>
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == "success" %}
+                                <div class="message-box">
+                                    <div class="icon-main success"><span class="ot-flaticon-check-mark-black-outline"></span></div>
+                                    <div class="content-box">
+                                        <h6>Success</h6>
+                                        <p>{{message}}.</p>
+                                    </div>
+                                    <i class="ot-flaticon-close"></i>
+                                </div>
+                                {% else %}
+                                <div class="message-box">
+                                    <div class="icon-main danger"><span class="ot-flaticon-close"></span></div>
+                                    <div class="content-box">
+                                        <h6>Error</h6>
+                                        <p>{{message}}.</p>
+                                    </div>
+                                    <i class="ot-flaticon-close"></i>
+                                </div>
+                                {% endif %}
+                                <div class="space-30"></div>
+                                {% endfor %}
+                                {% endif %}
                             <p class="font14">Your phone number will not be published. Required fields are marked *</p>
                             <form action="" method="post" class="wpcf7">
                               {% csrf_token %}
@@ -42,42 +62,35 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 ">
                         <div class="contact-right">
                             <div class="ot-heading">
                                 <span>[ our contact details ]</span>
-                                <h2 class="main-heading">Let's Start a Project</h2>
+                                <h2 class="main-heading">Let's us help you</h2>
                             </div>
                             <p>Give us a call or drop by anytime, we endeavour to answer all enquiries within 24 hours on business days. We will be happy to answer your questions.</p>
                             <div class="contact-info">
                                 <i class="ot-flaticon-place"></i>
                                 <div class="info-text">
                                     <h6>OUR ADDRESS:</h6>
-                                    <p style="color:grey;">411 University St, Seattle, USA</p>
+                                    <p style="color:grey;">{{settings.address}}</p>
                                 </div>
                             </div>
                             <div class="contact-info">
                                 <i class="ot-flaticon-mail"></i>
                                 <div class="info-text">
                                     <h6>OUR MAILBOX:</h6>
-                                    <p><a href="mailto:theratio_interior@mail.com" style="color:grey;">theratio_interior@mail.com</a></p>
+                                    <p><a href="mailto:{{settings.email}}" style="color:grey;">{{settings.email}}</a></p>
                                 </div>
                             </div>
                             <div class="contact-info">
                                 <i class="ot-flaticon-phone-call"></i>
                                 <div class="info-text">
                                     <h6>OUR PHONE:</h6>
-                                    <p><a href="tel:+998901731700" style="color:grey;">+998901731700</a></p>
+                                    <p><a href="tel:{{settings.phone_number}}" style="color:grey;">{{settings.phone_number}}</a></p>
                                 </div>
                             </div>
-                            <div class="list-social">
-                                <ul>
-                                    <li><a href="http://twitter.com" target="_self"><i class="fab fa-twitter"></i></a></li>
-                                    <li><a href="http://facebook.com" target="_self"><i class="fab fa-facebook-f"></i></a></li>
-                                    <li><a href="http://linkedin.com" target="_self"><i class="fab fa-linkedin-in"></i></a></li>
-                                    <li><a href="http://instagram" target="_self"><i class="fab fa-instagram"></i></a></li>
-                                </ul>
-                            </div>
+                            <div class="list-social"></div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +98,7 @@
         </section>
         <div class="contact-map">
             <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d86077.66255184308!2d-122.40402224079803!3d47.60810999586645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54906ab3f905c4b1%3A0x96bf575ff75ab1aa!2s411%20University%20St%2C%20Seattle%2C%20WA%2098101%2C%20Hoa%20K%E1%BB%B3!5e0!3m2!1svi!2s!4v1584084043716!5m2!1svi!2s" height="522" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2049.201186048642!2d72.35581952950803!3d40.760709253239874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bcede709e42deb%3A0xdb82869658c324fb!2sFly%20Mir%20Consulting!5e0!3m2!1sen!2s!4v1734046025252!5m2!1sen!2s" height="522" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
             </div>
         </div>
 

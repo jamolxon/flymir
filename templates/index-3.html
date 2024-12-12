@@ -4,10 +4,6 @@
 
     {% if company %}
     <section class="about-3 p-xl-0 pb-sm-0" style="margin-top: 50px;">
-        <div class="grid-lines grid-lines-vertical">
-            <span class="g-line-vertical line-left color-line-default"></span>
-            <span class="g-line-vertical line-right color-line-default"></span>
-        </div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 mb-5 mb-lg-0 align-self-center">
@@ -37,14 +33,10 @@
 
     {% if services or statistics %}
     <section class="services-3" id="Services">
-        <div class="grid-lines grid-lines-vertical">
-            <span class="g-line-vertical line-left color-line-default"></span>
-            <span class="g-line-vertical line-right color-line-default"></span>
-        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center theratio-align-center">
-                    <div class="ot-heading is-dots">
+                    <div class="ot-heading"
                         <span>[ OUR SERVICES ]</span>
                         <h2 class="main-heading">What Can We Offer</h2>
                     </div>
@@ -112,15 +104,12 @@
     {% endif %}
 
 
+    {% if programs %}
     <section>
-        <div class="grid-lines grid-lines-vertical">
-            <span class="g-line-vertical line-left color-line-default"></span>
-            <span class="g-line-vertical line-right color-line-default"></span>
-        </div>
         <div class="container">
             <div class="row pb-50">
                 <div class="col-lg-12 col-md-12 mb-4 mb-lg-0 text-center theratio-align-center">
-                    <div class="ot-heading is-dots">
+                    <div class="ot-heading">
                         <span>[ programs ]</span>
                         <h2 class="main-heading">See Our University Programs</h2>
                     </div>
@@ -164,14 +153,12 @@
             </center>
         </div>
     </section>
+    {% endif %}
 
+    {% if students %}
     <section class="our-skill-3 pb-0">
-        <div class="grid-lines grid-lines-vertical">
-            <span class="g-line-vertical line-left color-line-default"></span>
-            <span class="g-line-vertical line-right color-line-default"></span>
-        </div>
         <div class="container-fluid px-0 px-xl-90 text-center theratio-align-center">
-            <div class="ot-heading is-dots">
+            <div class="ot-heading">
                 <span>[students]</span>
                 <h2>Students That We Helped</h2>
             </div>
@@ -204,6 +191,7 @@
         </div>
         <center> <a href="{% url 'consulting:student-list' %}" class="octf-btn octf-btn-dark border-hover-dark mt-5">View all</a> </center>
     </section>
+    {% endif %}
 
 
     {% verbatim %}
@@ -221,7 +209,7 @@
     <!--             </div> -->
     <!--             <div class="col-lg-6 px-0 mb-5 mb-xl-0"> -->
     <!--                 <div class="testi-slide-block-3"> -->
-    <!--                     <div class="ot-heading is-dots"> -->
+    <!--                     <div class="ot-heading"> -->
     <!--                         <span>[ testimonials ]</span> -->
     <!--                         <h2 class="main-heading">What People Say</h2> -->
     <!--                     </div> -->
@@ -252,47 +240,44 @@
 
     {% endverbatim %}
 
+    {% if blogs %}
     <section>
-        <div class="grid-lines grid-lines-vertical">
-            <span class="g-line-vertical line-left color-line-default"></span>
-            <span class="g-line-vertical line-right color-line-default"></span>
-        </div>
         <div class="container">
             <div class="row pb-50">
                 <div class="col-lg-12 col-md-12 mb-4 mb-lg-0 text-center theratio-align-center">
-                    <div class="ot-heading is-dots">
+                    <div class="ot-heading">
                         <span>[ our blog ]</span>
                         <h2 class="main-heading">Read Our Latest News</h2>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center">
-                {% for n in news_posts %}
+                {% for blog in blogs %}
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="post-box masonry-post post-item">
                         <div class="post-inner">
                             <div class="entry-media post-cat-abs">
-                                <a href="{{n.get_absolute_url}}"><img src="{{n.home_image.url}}" alt=""></a>
+                                <a href="{% url 'consulting:news-detail' blog.slug %}"><img src="{{blog.image.url}}" alt=""></a>
                                 <div class="post-cat">
-                                    <div class="posted-in"><a href="{{n.category.get_absolute_url}}">{{n.category}}</a></div>
+                                    <div class="posted-in"><a href="{% url 'consulting:category-news-list' blog.category.slug %}">{{blog.category}}</a></div>
                                 </div>
                             </div>
                             <div class="inner-post">
                                 <div class="entry-header">
                                     <div class="entry-meta">
-                                        <span class="posted-on"><a href="{{n.get_absolute_url}}">{{n.date}}</a></span>
+                                        <span class="posted-on"><a href="{% url 'consulting:news-detail' blog.slug %}">{{blog.date}}</a></span>
                                         <span class="byline">
-                                            <span class="author vcard"><a class="url fn n" href="{{n.get_absolute_url}}">{{n.author}}</a></span>
+                                            <span class="author vcard"><a class="url fn n" href="{% url 'consulting:news-detail' blog.slug %}">{{blog.author}}</a></span>
                                         </span>
                                     </div><!-- .entry-meta -->
 
                                     <h5 class="entry-title">
-                                        <a class="title-link" href="{{n.get_absolute_url}}">{{n.name}}</a>
+                                        <a class="title-link" href="{% url 'consulting:news-detail' blog.slug %}">{{blog.name}}</a>
                                     </h5>
                                 </div><!-- .entry-header -->
 
                                 <div class="the-excerpt">
-                                    {{n.description|truncatewords:15}}
+                                    {{blog.description|truncatewords:15}}
                                 </div><!-- .entry-content -->
                             </div>
                         </div>
@@ -305,5 +290,6 @@
             </center>
         </div>
     </section>
+    {% endif %}
 
     {% endblock %}
