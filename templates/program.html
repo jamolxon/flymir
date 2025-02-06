@@ -1,0 +1,91 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+
+    <div id="content" class="site-content" style="margin-top: -200px;">
+        <div class="page-header dtable text-center header-transparent pheader-about">
+            <div class="dcell">
+                <div class="container">
+                    <h1 class="page-title" style="color: black;">Programs We Offer</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="entry-content" style="margin-top: -150px;">
+        <div class="container">
+            <div class="row">
+                <div class="content-area col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                    {% for program in page_obj %}
+                    <article class="post-box">
+                        <div class="post-inner">
+                            <div class="entry-media post-cat-abs">
+                                <a href="{% url 'consulting:program-detail' program.slug %}"><img src="{{program.image.url}}" alt=""></a>
+                                <div class="post-cat">
+                                    <div class="posted-in"><a href="{% url 'consulting:program-detail' program.slug %}">{{program.subcategory}}</a></div>
+                                </div>
+                            </div>
+                            <div class="inner-post">
+                                <div class="entry-header">
+                                    <div class="entry-meta">
+                                        <span class="posted-on"> <a href="{% url 'consulting:program-detail' program.slug %}"> {{program.published_date}}</a></span>
+                                    </div>
+                                    <h4 class="entry-title"><a class="title-link" href="{% url 'consulting:program-detail' program.slug %}">{{program.name}}</a></h4>
+                                </div>
+                                <div class="entry-summary the-excerpt">
+                                    <p>{{program.description|truncatewords:30}}</p>
+                                </div>
+                                <div class="entry-footer"><a href="{% url 'consulting:program-detail' program.slug %}" class="btn-details"> READ MORE</a></div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+
+                    {% if page_obj.paginator %}
+                    {% if page_obj.has_next or page_obj.has_previous %}
+                    <ul class="page-pagination text-center mt-3 none-style">
+
+                        {% if page_obj.has_previous %}
+                        <li><a class="prev page-numbers" href="?page={{page_obj.previous_page_number}}">Prev</a></li>
+                        {% else %}
+
+                        {% endif %}
+
+                        {% for page in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page %}
+                        <li class="active"><span>{{page}} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                        <li><a href="?page={{page}}">{{page}}</a></li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li><a class="next page-numbers" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                        {% else %}
+
+                        {% endif %}
+
+                    </ul>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <div class="widget-area primary-sidebar col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                    <aside class="widget widget_categories">
+                        <h6 class="widget-title">Countries</h6>
+                        <ul>
+                            {% for category in categories %}
+                            <li><a href="">{{category.name}}</a> <span class="count">({{category.program_count}})</span></li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                    <aside class="widget widget_media_image text-center">
+                        <a href="{% url 'consulting:contact' %}"><img src="https://via.placeholder.com/270x330.png" alt=""></a>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

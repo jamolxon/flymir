@@ -169,7 +169,7 @@
                 <div class="project-items category-19 ">
                     <div class="projects-box">
                         <div class="projects-thumbnail">
-                            <a href="{{student.get_absolute_url}}">
+                            <a href="{% url 'consulting:student-detail' student.slug %}">
                                 <img src="{{student.image.url}}" alt="">
                             </a>
                             <div class="overlay">
@@ -179,10 +179,10 @@
                         </div>
                         <div class="portfolio-info">
                             <div class="portfolio-info-inner">
-                                <h5><a class="title-link" href="{{student.get_absolute_url}}">{{student.name}}</a></h5>
-                                <p class="portfolio-cates"><a href="#">{{student.university}}</a></p>
+                                <h5><a class="title-link" href="{% url 'consulting:student-detail' student.slug %}">{{student.name}}</a></h5>
+                                <p class="portfolio-cates"><a href="{% url 'consulting:program-detail' student.university.slug %}">{{student.university.name}}</a></p>
                             </div>
-                            <a class="overlay" href="{{student.get_absolute_url}}"></a>
+                            <a class="overlay" href="{% url 'consulting:student-detail' student.slug %}"></a>
                         </div>
                     </div>
                 </div>

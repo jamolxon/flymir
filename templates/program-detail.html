@@ -1,0 +1,40 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+    <div class="entry-content">
+        <div class="container">
+            <div class="row">
+                <div class="content-area col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                    <article class="blog-post post-box">
+
+                        <div class="inner-post">
+                            <header class="entry-header">
+                                <h3 class="entry-title">{{program.name}}</h3>
+                            </header>
+                            <div class="entry-meta">
+                                <span class="byline" style="font-size:17px;"><a class="url fn n" href="javascript:void(0);">{{program.description}}</a></span>
+                            </div>
+                            <div class="entry-media post-cat-abs">
+                                <img src="{{program.image.url}}" alt="">
+
+                                <div class="post-cat">
+                                    <div class="posted-in"><a href="">{{program.subcategory.name}}</a></div>
+                                </div>
+                            </div>
+                            <div class="entry-meta">
+                                <span class="byline"><a class="url fn n" href="javascript:void(0);">Spec - {{program.specialisation}}</a></span>
+                                <span class="posted-on"> <a href="javascript:void(0);">Local Rating - {{program.local_rating}}</a></span>
+                                <span class="comment-num"> <a href="javascript:void(0);">Global Rating - {{program.global_rating}}</a></span>
+                                <span class="comment-num"> <a href="javascript:void(0);">Date Opened - {{program.date_opened}}</a></span>
+                            </div>
+                            <div class="entry-summary the-excerpt">
+                                <p>{{program.text|safe}}</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

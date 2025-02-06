@@ -1,7 +1,7 @@
-from enum import unique
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 from ckeditor.fields import RichTextField
 from django_resized import ResizedImageField
@@ -82,7 +82,7 @@ class News(BaseModel):
         return f"{self.name}"
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     name = models.CharField(_("name"), max_length=256)
     message = models.TextField(_("message"))
     parent = models.ForeignKey('self', verbose_name = 'parent', on_delete=models.SET_NULL, null=True, blank=True, related_name="children")
@@ -99,63 +99,62 @@ class Comment(models.Model):
         return f"{self.name}"
 
 
-# Programs Model
-class Programs(models.Model):
-    name = models.CharField('Name', max_length=100)
-    slug = models.SlugField('*', unique=True, max_length=70)
-    description = models.CharField('Description', max_length=300)
-    author = models.CharField('Author', max_length=100)
-    home_image = models.ImageField('Home Page Image', help_text='Size: 570x484', upload_to='news_shots/')
-    image = models.ImageField('Programs Page Image', help_text='Size: 790x510', upload_to='programs/')
-    related_image = models.ImageField('Related Programs Image', help_text='Size: 150x150', upload_to='programs/')
-    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, verbose_name='SubCategory')
-    specialisation = models.CharField('Specialisation of university', help_text='e.g: IT, Law or Business', max_length=100)
-    local_rating = models.CharField('Local rating', max_length=50)
-    global_rating = models.CharField('Global rating', max_length=50)
-    date_opened = models.CharField('The date opened', max_length=20)
-    first_detail_image = models.ImageField('First Detail Image', help_text='Size: 720x720', upload_to='programs/')
-    second_detail_image = models.ImageField('Second Detail Image', help_text='Size: 720x720', upload_to='programs/')
-    third_detail_image = models.ImageField('Third Detail Image', help_text='Size: 720x720',blank=True, upload_to='programs/')
-    fourth_detail_image = models.ImageField('Fourth Detail Image', help_text='Size: 720x720', blank=True, upload_to='programs/')
-    date = models.DateTimeField('Date', auto_now_add=True)
-    capital_letter = models.CharField('Capital letter', max_length=10)
-    text = RichTextField('Text',)
-    extra_text = RichTextField('Extra Text', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('consulting:ProgramsDetailView', kwargs={'programs_slug':self.slug})
-
-    def __str__(self):
-        return self.name
+class Program(BaseModel):
+    name = models.CharField(_("name"), max_length=256)
+    slug = models.SlugField(_("slug"), max_length=256, unique=True, blank=True, null=True)
+    description = models.TextField(_("description"))
+    image = ResizedImageField(_("image"), size=[790, 510], crop=["middle", "center"], quality=97, help_text="preferred size: 790x510", upload_to="program/%Y/%m")
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, verbose_name=_("subcategory"), related_name="programs")
+    specialisation = models.CharField(_("specialisation"), help_text='e.g: IT, Law, Business', max_length=256)
+    local_rating = models.CharField(_("local rating"), max_length=256)
+    global_rating = models.CharField(_("global rating"), max_length=256)
+    date_opened = models.CharField(_("date opened"), max_length=256)
+    text = RichTextField(_("text"))
+    published_date = models.DateTimeField(_("published date"), auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Program'
-        verbose_name_plural = 'Programs'
-
-
-# Students Model
-class Students(models.Model):
-    name = models.CharField('Name', max_length=100)
-    slug = models.SlugField('*', unique=True, max_length=70)
-    image = models.ImageField('Image', help_text='Size: 720x720', upload_to='students/')
-    detail_image = models.ImageField('Detail Page Image', help_text='Size: 720x720', upload_to='students/')
-    country = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, verbose_name='SubCategory')
-    university = models.ForeignKey(Programs, on_delete=models.CASCADE, null=True, verbose_name='University')
-    program_title = models.CharField('Program', max_length=100)
-    budget = models.CharField('Budget', max_length=100)
-    capital_letter = models.CharField('Capital letter', max_length=10)
-    text = RichTextField('Text',)
-    date = models.CharField('Date', max_length=100)
-
-    def get_absolute_url(self):
-        return reverse('consulting:StudentsDetailView', kwargs={'students_slug':self.slug})
+        db_table = "program"
+        verbose_name = _("program")
+        verbose_name_plural = _("programs")
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
+
+class Student(BaseModel):
+    name = models.CharField(_("name"), max_length=256)
+    slug = models.SlugField(_("slug"), unique=True, blank=True, null=True, max_length=256)
+    country = models.ForeignKey(Subcategory, on_delete=models.CASCADE,  verbose_name=_("country"), related_name="students")
+    university = models.ForeignKey(Program, on_delete=models.CASCADE,  verbose_name=_("university"), related_name="students")
+    image = ResizedImageField(_("image"), size=[720, 720], crop=["middle", "center"], quality=97, help_text="preferred size: 720x720", upload_to="student/%Y/%m")
+    program_type = models.CharField(_("program type"), max_length=256)
+    date = models.DateField(_("date"), default=timezone.now)
+    text = RichTextField(_("text"))
 
     class Meta:
-        verbose_name = 'Student'
-        verbose_name_plural = 'Students'
+        db_table = "student"
+        verbose_name = _("student")
+        verbose_name_plural = _("students")
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class StudentComment(BaseModel):
+    name = models.CharField(_("name"), max_length=256)
+    message = models.TextField(_("message"))
+    parent = models.ForeignKey('self', verbose_name = 'parent', on_delete=models.SET_NULL, null=True, blank=True, related_name="children")
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, related_name='comments', verbose_name=_("student"))
+    date = models.DateTimeField(_("date"), auto_now_add=True)
+
+    class Meta:
+        db_table = "student_comment"
+        ordering = ["-id"]
+        verbose_name = _("student comment")
+        verbose_name_plural = _("student comments")
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Header(BaseModel):
@@ -313,8 +312,21 @@ class Call(BaseModel):
         return f"{self.phone_number}"
 
 
+class Scholarship(BaseModel):
+    name = models.CharField(_("name"), max_length=256)
+    url = models.CharField(_("url"), max_length=256)
+
+    class Meta:
+        db_table = "scholarship"
+        verbose_name = _("scholarship")
+        verbose_name_plural = _("scholarships")
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 # Partners Model
-class Partners(models.Model):
+class Partners(BaseModel):
     name = models.CharField('Name', max_length=100)
     image = models.ImageField('Image', help_text='Size: 300x145', upload_to='partners/')
 
@@ -326,7 +338,7 @@ class Partners(models.Model):
         verbose_name_plural = 'Partners'
 
 
-# class Flag(models.Model):
+# class Flag(BaseModel):
 #     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True, verbose_name='Country')
 #     image = models.ImageField('Image', help_text='Size: 300x145', upload_to='flags/')
 

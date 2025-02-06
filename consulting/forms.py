@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Textarea
 
-from consulting.models import Comment, Contact
+from consulting.models import Comment, Contact, StudentComment
 
 
 class CommentForm(ModelForm):
@@ -10,6 +10,17 @@ class CommentForm(ModelForm):
         widgets = {
             'message': Textarea(attrs={'cols': 30, 'rows': 8}),
         }
+
+
+class StudentCommentForm(ModelForm):
+    class Meta:
+        model = StudentComment
+        fields = ('name', 'message')
+        widgets = {
+            'message': Textarea(attrs={'cols': 30, 'rows': 8}),
+        }
+
+
 
 
 class ContactForm(ModelForm):

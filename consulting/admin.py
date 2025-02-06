@@ -4,7 +4,6 @@ from consulting import models
 
 admin.site.register(models.Header)
 admin.site.register(models.Settings)
-admin.site.register(models.Call)
 admin.site.register(models.Feature)
 admin.site.register(models.Company)
 admin.site.register(models.Ceo)
@@ -18,7 +17,11 @@ admin.site.register(models.Review)
 admin.site.register(models.Statistics)
 admin.site.register(models.Service)
 admin.site.register(models.Comment)
+admin.site.register(models.StudentComment)
 admin.site.register(models.Contact)
+admin.site.register(models.Student)
+admin.site.register(models.Program)
+admin.site.register(models.Scholarship)
 
 
 # @admin.register(Categories)

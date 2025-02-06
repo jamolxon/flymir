@@ -2,36 +2,28 @@
 {% load static %}
 {% block content %}
 
-        <div id="content" class="site-content">
-            <div class="page-header dtable text-center header-transparent pheader-portfolio">
-                <div class="dcell">
-                    <div class="container">
-                        <h1 class="page-title">Portfolio 3 Columns Wide</h1>
-                        <ul id="breadcrumbs" class="breadcrumbs none-style">
-                            <li><a href="index.html">Home</a></li>
-                            <li class="active">Portfolio 3 Columns Wide</li>
-                        </ul>
-                    </div>
+    <div id="content" class="site-content" style="margin-top: -200px;">
+        <div class="page-header dtable text-center header-transparent pheader-about">
+            <div class="dcell">
+                <div class="container">
+                    <h1 class="page-title" style="color: black;">Students That We Helped</h1>
                 </div>
             </div>
         </div>
+    </div>
 
-        <section class="our-portfolio">
+
+        <section class="our-portfolio" style="margin-top: -150px;">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 text-center theratio-align-center">
-                        <div class="ot-heading is-dots">
-                            <span>[ our library ]</span>
-                            <h2 class="main-heading">Students and<br>  Clients we have worked</h2>
-                        </div>
-                        <div class="space-40"></div>
                         <div class="project-filter-wrapper">
                           <div class="projects-grid pf_3_cols style-1 img-scale w-auto m-0">
                             {% for student in page_obj %}
                               <div class="project-item category-20 ">
                                   <div class="projects-box">
                                       <div class="projects-thumbnail">
-                                          <a href="{{student.get_absolute_url}}">
+                                        <a href="{% url 'consulting:student-detail' student.slug %}">
                                               <img src="{{student.image.url}}" alt="{{student.name}}">
                                           </a>
                                           <div class="overlay">
@@ -41,10 +33,10 @@
                                       </div>
                                       <div class="portfolio-info">
                                           <div class="portfolio-info-inner">
-                                              <h5><a class="title-link" href="{{student.get_absolute_url}}">{{student.name}}</a></h5>
+                                              <h5><a class="title-link" href="{% url 'consulting:student-detail' student.slug %}">{{student.name}}</a></h5>
                                               <p class="portfolio-cates"><a href="#">{{student.university.name}}</a></p>
                                           </div>
-                                          <a class="overlay" href="{{student.get_absolute_url}}"></a>
+                                          <a class="overlay" href="{% url 'consulting:student-detail' student.slug %}"></a>
                                       </div>
                                   </div>
                               </div>

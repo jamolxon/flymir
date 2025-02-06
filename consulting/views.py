@@ -18,6 +18,7 @@ class HomeView(View):
         features = models.Feature.objects.all().order_by("id")[:4]
         statistics = models.Statistics.objects.all()[:4]
         blogs = models.News.objects.all().order_by("-id")[:4]
+        students = models.Student.objects.all().order_by("-id")[:8]
 
         context = {
                 "company": company,
@@ -25,7 +26,7 @@ class HomeView(View):
                 "features": features,
                 "statistics": statistics,
                 "programs": None,
-                "students": None,
+                "students": students,
                 "blogs": blogs,
                 }
         return render(request, 'index-3.html', context)
@@ -58,26 +59,26 @@ class AboutView(View):
 
 class StudentListView(View):
     def get(self, request):
-        students = models.Students.objects.all()
-        paginator = Paginator(students, 6)
+        students = models.Student.objects.all().order_by("-id")
+        paginator = Paginator(students, 9)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context = {
             'students':students,
             'page_obj':page_obj,
         }
-        return render(request, 'p-wide.html', context)
+        return render(request, 'student.html', context)
 
 
 class StudentDetailView(View):
     def get(self, request, slug):
-        student = get_object_or_404(models.Students, slug=slug)
-        students = models.Students.objects.all().order_by('-id')[:3]
+        student = get_object_or_404(models.Student, slug=slug)
+        students = models.Student.objects.exclude(pk=student.pk).order_by('-id')[:3]
         context = {
             'student':student,
             'students':students,
         }
-        return render(request, 'portfolio-right.html', context)
+        return render(request, 'student-detail.html', context)
 
 
 class NewsListView(View):
@@ -151,34 +152,51 @@ class AddCommentView(View):
         return render(request, 'news-detail.html', {'form':form})
 
 
+class StudentCommentView(View):
+    def post(self, request, pk):
+        if request.method == 'POST':
+            form = forms.StudentCommentForm(request.POST)
+            if form.is_valid():
+                create = form.save(commit=False)
+                if request.POST.get("parent", None):
+                    form.parent_id = int(request.POST.get('parent'))
+                student = get_object_or_404(models.Student, id=pk)
+                create.student = student
+                form.save()
+                return HttpResponseRedirect(reverse('consulting:student-detail', kwargs={'slug': student.slug}))
+        else:
+            form = forms.CommentForm()
+        return render(request, 'student-detail.html', {'form':form})
+
+
 class ProgramListView(View):
     def get(self, request):
-        programs = models.Programs.objects.all()
-        related_programs = models.Programs.objects.all().order_by('-id')[:3]
-        program_name = models.Programs.objects.filter().only('name')[:7]
-        category = models.Subcategory.objects.all()
+        programs = models.Program.objects.all()
+        related_programs = models.Program.objects.filter().order_by('-id')[:3]
+        program_name = models.Program.objects.filter().only('name')[:7]
+        category = models.Subcategory.objects.all().annotate(program_count=Count("programs"))
         paginator = Paginator(programs, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context = {
-            'page_obj':page_obj,
-            'category':category,
-            'program_name':program_name,
-            'related_programs':related_programs,
+            'page_obj': page_obj,
+            'categories': category,
+            'program_name': program_name,
+            'related_programs': related_programs,
         }
-        return render(request, 'programs.html', context)
+        return render(request, 'program.html', context)
 
 
 class CategoryProgramView(View):
     def get(self, request, slug):
         subcategory = get_object_or_404(models.Subcategory, slug=slug)
-        programs = models.Programs.objects.filter(subcategory=subcategory)
+        programs = models.Program.objects.filter(subcategory=subcategory)
         paginator = Paginator(programs, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         category = models.Subcategory.objects.all()
-        related_programs = models.Programs.objects.filter().order_by('-id')[:3]
-        program_name = models.Programs.objects.filter().only('name')[:7]
+        related_programs = models.Program.objects.filter().order_by('-id')[:3]
+        program_name = models.Program.objects.filter().only('name')[:7]
         context = {
             'page_obj':page_obj,
             'category':category,
@@ -189,23 +207,21 @@ class CategoryProgramView(View):
 
 
 class ProgramDetailView(View):
-    def get(self, request, programs_slug):
-        program = get_object_or_404(models.Programs, slug=programs_slug)
-        related_programs = models.Programs.objects.all().order_by('-id')[:3]
+    def get(self, request, slug):
+        program = get_object_or_404(models.Program, slug=slug)
+        related_programs = models.Program.objects.all().order_by('-id')[:3]
         context = {
             'program':program,
             'related_programs':related_programs,
         }
-        return render(request, 'portfolio-standar.html', context)
+        return render(request, 'program-detail.html', context)
 
 
 class ProgramSearchView(View):
     def get(self, request):
         query = request.GET.get('search', None)
-        object_list = models.Programs.objects.filter(Q(name__icontains = query) | Q(description__icontains = query) |
-        Q(author__icontains = query) | Q(date__icontains = query)
-        )
-        return render(request, 'search.html', {'object_list':object_list})
+        object_list = models.Program.objects.filter(Q(name__icontains = query) | Q(description__icontains = query) | Q(subcategory__name = query))
+        return render(request, 'program-search.html', {'object_list':object_list})
 
 
 class ContactView(View):

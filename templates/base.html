@@ -90,7 +90,9 @@
 
                                                 <li><a href="{% url 'consulting:home' %}#Services">Services</a></li>
 
-                                                <li><a href="{% url 'consulting:home' %}#partners">Partners</a>
+                                                {% verbatim %}
+                                                <!-- <li><a href="{% url 'consulting:home' %}#partners">Partners</a> -->
+                                                {% endverbatim %}
 
                                                     {% if program_categories %}
                                                 <li class="menu-item-has-children"><a href="{% url 'consulting:program-list' %}">Programs</a>
@@ -100,7 +102,7 @@
                                                             {% if category.subcategories.all %}
                                                             <ul class="sub-menu">
                                                                 {% for s in category.subcategories.all %}
-                                                                <li><a href="{{s.get_absolute_url}}">{{s.name}}</a></li>
+                                                                <li><a href="{% url 'consulting:program-search' %}?search={{s.name}}">{{s.name}}</a></li>
                                                                 {% endfor %}
                                                             </ul>
                                                             {% endif %}
@@ -270,7 +272,7 @@
                                 <p style="font-size: 20px;">{{header.description}}</p>
                                 <!-- </div> -->
                                 <div class="ot-button">
-                                    <a href="" class="octf-btn octf-btn-dark border-hover-dark">View Programs</a>
+                                    <a href="{% url 'consulting:program-list' %}" class="octf-btn octf-btn-dark border-hover-dark">View Programs</a>
                                 </div>
                                 <!-- </div> -->
                             </div>
@@ -358,21 +360,17 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">
-                            <div class="widget-footer footer-widget-subcribe">
-                                <h6>Order a call</h6>
-                                <form method="POST" class="mc4wp-form" action="{% url 'consulting:order-call' %}">
-                                    {% csrf_token %}
-                                    <div class="mc4wp-form-fields">
-                                        <div class="subscribe-inner-form">
-                                            <input type="text" name="phone" placeholder="YOUR PHONE" required="" style="background:inherit;">
-                                            <button type="submit" class="subscribe-btn-icon"><i class="ot-flaticon-send"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                                <p>Leave your phone above to get contacted by our agency.</p>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-4 mb-md-0">
+                            <div class="widget-footer widget-contact">
+                                <h6>Scholarship programs</h6>
+                                <ul>
+                                    {% for scholarship in scholarships %}
+                                    <li><a href="{{scholarship.url}}" target="_blank">{{scholarship.name}}</a></li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </footer><!-- #site-footer -->

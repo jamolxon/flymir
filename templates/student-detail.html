@@ -1,0 +1,151 @@
+{% extends 'inner-base.html' %}
+{% load static %}
+{% block content %}
+
+    <div id="content" class="site-content" style="margin-top: -200px;">
+        <div class="page-header dtable text-center header-transparent pheader-about">
+            <div class="dcell">
+                <div class="container">
+                    <h1 class="page-title" style="color: black;">{{student.name}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="portfolio-detail p-0" {% if not students %} style="margin-top: -150px; margin-bottom: 100px;" {% else %} style="margin-top: -150px;" {% endif %}>
+        <div class="container">
+            <div class="row">
+                <div class="space-90"></div>
+                <div class="col-lg-6 col-md-12">
+                    <h4>How was the process?</h4>
+                    <p><span class="drop-cap"><span class="drop-cap-letter"></span></span>{{student.text|safe}}</p>
+                    <div class="space-20"></div>
+                    <div class="space-5"></div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>Organisation:</h6>
+                                <p>Fly Mir Consulting</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>Client:</h6>
+                                <p>{{student.name}}</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>Country:</h6>
+                                <p>{{student.country.name}}</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>University:</h6>
+                                <p>{{student.university.name}}</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>Program:</h6>
+                                <p>{{student.program_type}}</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <div class="p-detail-info">
+                                <h6>Date:</h6>
+                                <p>{{student.date}}</p>
+                            </div>
+                            <div class="space-20"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+                    <div class="image-gallery">
+                        <div id="gallery-2" class="gallery gallery-columns-1 s2">
+                            <figure class="gallery-item">
+                                <div class="gallery-icon portrait">
+                                    <a href="{{student.image.url}}">
+                                        <img src="{{student.image.url}}" alt="">
+                                        <span class="overlay"><i class="ot-flaticon-add"></i></span>
+                                    </a>
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if student.comments.all %}
+            <section class="about-testi">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 text-center theratio-align-center">
+                            <div class="ot-heading">
+                                <span>[ testimonials ]</span>
+                                <h2 class="main-heading">What Students Say</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="ot-testimonials v-light">
+                                <div class="testimonial-inner testi-col-3 owl-theme owl-carousel">
+                                    {% for comment in student.comments.all %}
+                                    <div class="testi-item">
+                                        <div class="ttext">
+                                            <div class="layer-behind"></div>
+                                            <span></span>
+                                            {{comment.message|truncatewords:50}}
+                                        </div>
+                                        <div class="t-head flex-middle">
+                                            <div class="tinfo">
+                                                <h6>{{comment.name}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <script>
+            function AddReview(name, id) {
+                document.getElementById('contactparent').value = id;
+                document.getElementById('comment').innerHTML = `${name}, `;
+                console.log(id);
+                console.log(name);
+            }
+            </script>
+            <div class="comment-respond" style="margin-top: 100px; margin-bottom: 100px;">
+                <h3 class="comment-reply-title" id="formReview">Leave a comment</h3>
+                <form action="{% url 'consulting:student-comment' student.pk %}" method="POST" class="comment-form">
+                    {% csrf_token %}
+                    <p class="comment-notes"> All fields are required <span class="required">*</span></p>
+                    <div class="row">
+                        <p class="comment-form-author col-md-12">
+                            <input id="author" name="name" type="text" value="" size="30" placeholder="Name*" required="">
+                        </p>
+                        <input type="hidden" name="parent" id="contactparent" value="">
+                    </div>
+                    <p class="comment-form-comment">
+                        <textarea id="comment" name="message" cols="45" rows="8" placeholder="Comment*" required=""></textarea>
+                    </p>
+                    <p class="form-submit">
+                        <input name="submit" type="submit" id="submit" class="octf-btn" value="Post Comment">
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    {% endblock %}
